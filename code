@@ -1,0 +1,195 @@
+#include <iostream>
+#include <chrono> //library I'm using for my timer
+using namespace std;
+
+string inventory[5]; //array that sets up my inventory
+void Computer(); //declaration for my computer function
+//global variables
+int timeLeft = 600; //this is how much time on the the timer 600 seconds = 10 minutes
+int room = 1; // this is the variable that sets what room I'm in
+bool rm1description = false; // this just shows whether I've read the room one description so it doesn't print every time I do something in room 1
+
+int main() {
+	system("color 0f");
+	const int TIME_LIMIT = 600;
+	auto start = chrono::steady_clock::now();
+	string input;
+	int room1code;
+	while (timeLeft >= 0) {
+		auto now = chrono::steady_clock::now();
+		timeLeft = TIME_LIMIT - chrono::duration_cast<chrono::seconds>(now - start).count(); 
+		cout << "Oxygen left: " << timeLeft << endl;
+		cout << "your inventory: ";
+		for (int i = 0; i < 5; i++)
+			cout << inventory[i] << " | ";
+		cout << endl << endl;
+		switch (room) {
+		case 1:
+			if (rm1description == false) {
+				cout << "You wake up on a metal bunk bed in a cold room with no memory of anything." << endl;
+				cout << "There are 9 other identical bunks all lined up against the wall with neat, white sheets on them." << endl;
+				cout << "The floor, cieling, and walls are made of white plastic and there are no windows." << endl;
+				rm1description = true;
+			}
+			cout << "There's a small table with a COMPUTER on it in the center of the room." << endl;
+			cout << "The sheets on one BED are slightly askew and it looks like something is underneath." << endl;
+			cout << "There is a heavy, metal DOOR on the west side of the room" << endl;
+			cin >> input;
+			if (input == "bed") {
+				cout << "You look in the bed and find a small thumbdrive that looks like it might fit in the COMPUTER" << endl;
+				inventory[0] = "thumbdrive";
+			}
+			if (input == "computer") {
+				Computer();
+			}
+			if (input == "door") {
+				cout << "enter 4-digit door code:" << endl;
+				cin >> room1code;
+				if (room1code == 1587) {
+					cout << "you unlocked the door!" << endl;
+					room = 2;
+				}
+				else
+					cout << "Thats not the code" << endl;
+			}
+			break;
+		case 2:
+			cout << "you're in room 2, you can go (w)est, (e)ast, or (u)p" << endl;
+			cin >> input;
+			if (input == "w")
+				room = 3;
+			else if (input == "e")
+				room = 1;
+			else if (input == "u")
+				room = 12;
+			break;
+		case 3:
+			cout << "you're in room 3, you can go (w)est or (e)ast" << endl;
+			cin >> input;
+			if (input == "e")
+				room = 2;
+			else if (input == "w")
+				room = 4;
+			break;
+		case 4:
+			cout << "you're in room 4, you can go (w)est, (e)ast, or (u)p" << endl;
+			cin >> input;
+			if (input == "u")
+				room = 9;
+			else if (input == "w")
+				room = 5;
+			else if (input == "e")
+				room = 3;
+			break;
+		case 5:
+			cout << "you're in room 5, you can go (w)est or (e)ast" << endl;
+			cin >> input;
+			if (input == "w")
+				room = 6;
+			else if (input == "e")
+				room = 4;
+			break;
+		case 6:
+			cout << "you're in room 6, you can go (u)p or (e)ast" << endl;
+			cin >> input;
+			if (input == "u")
+				room = 7;
+			else if (input == "e")
+				room = 5;
+			break;
+		case 7:
+			cout << "you're in room 7, you can go (e)ast or (d)own" << endl;
+			cin >> input;
+			if (input == "e")
+				room = 8;
+			else if (input == "d")
+				room = 6;
+			break;
+		case 8:
+			cout << "you're in room 8, you can go (w)est or (e)ast" << endl;
+			cin >> input;
+			if (input == "w")
+				room = 7;
+			else if (input == "e")
+				room = 9;
+			break;
+		case 9:
+			cout << "you're in room 9, you can go (u)p, (d)own, (e)ast, or (w)est" << endl;
+			cin >> input;
+			if (input == "u")
+				room = 10;
+			else if (input == "d")
+				room = 4;
+			else if (input == "e")
+				room = 11;
+			else if (input == "w")
+				room = 8;
+			break;
+		case 10:
+			cout << "you're in room 10, you can go (d)own" << endl;
+			cin >> input;
+			if (input == "d")
+				room = 9;
+			break;
+		case 11:
+			cout << "you're in room 11, you can go (e)ast or (w)est" << endl;
+			cin >> input;
+			if (input == "e")
+				room = 12;
+			else if (input == "w")
+				room = 9;
+			break;
+		case 12:
+			cout << "you're in room 12, you can go (w)est or (d)own" << endl;
+			cin >> input;
+			if (input == "w")
+				room = 11;
+			else if (input == "d")
+				room = 2;
+			break;
+		}
+	}
+}//end main
+
+void Computer() {
+	system("color 20");
+	char keypress;
+	do {
+		cout << "press q to quit" << endl;
+		cout << "press m to view map" << endl;
+		cout << "press d to access drive" << endl;
+		cin >> keypress;
+
+		if (keypress == 'm') {
+			cout << "  " << endl << endl << endl << endl;
+			cout << "                                              __________" << endl;
+			cout << "                                             |          |" << endl;
+			cout << "                                             |    10    |" << endl;
+			cout << "                                             |          |" << endl;
+			cout << "                       ______________________|__________|_____________________" << endl;
+			cout << "                      |          |           |          |          |          |" << endl;
+			cout << "                      |    7     |     8     |    9     |    11    |    12    |" << endl;
+			cout << "                      |          |           |          |          |          |" << endl;
+			cout << "                      |__________|___________|__________|__________|__________|__________" << endl;
+			cout << "                      |          |           |          |          |          |          |" << endl;
+			cout << "                      |    6     |     5     |    4     |    3     |     2    |     1    |" << endl;
+			cout << "                      |          |           |          |          |          |          |" << endl;
+			cout << "                      |__________|___________|__________|__________|__________|__________|" << endl << endl << endl;
+		}
+
+
+
+		if (keypress == 'd') {
+			if (inventory[0] == "thumbdrive") {
+				cout << "Welcome to the K-129!" << endl << "You are on a Soviet Submarine all by yourself." << endl;
+				cout << "If you want to survive you need to find a way to get to land" << endl;
+				cout << "But you only have a little oxygen left so better figure this out fast!" << endl;
+				cout << "Door code is: 1587" << endl;
+			}
+			else cout << "access denied." << endl;
+		}
+
+	} while (keypress != 'q');
+	system("color 0f");
+
+}
