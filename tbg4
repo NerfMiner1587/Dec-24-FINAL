@@ -1,0 +1,309 @@
+#include <iostream>
+#include <chrono> //library I'm using for my timer
+#include <windows.h>
+using namespace std;
+// end of boilerplate
+string inventory[5]; //array that sets up my inventory
+void Computer(); //declaration for my computer function
+void LeakSim();
+//global variables
+int timeLeft = 600; //this is how much time on the timer 600 seconds = 10 minutes
+int room = 1; // this is the variable that sets what room I'm in
+bool rm1description = false; // this just shows whether I've read the room one description so it doesn't print every time I do something in room 1
+bool leak = false;
+bool title = false;
+const int TIME_LIMIT = 600;
+int main() {
+	system("color 0f");
+	auto start = chrono::steady_clock::now();
+	string input;
+	int room1code;
+	while (timeLeft >= 0) {
+		auto now = chrono::steady_clock::now();
+		timeLeft = TIME_LIMIT - chrono::duration_cast<chrono::seconds>(now - start).count();
+		if (title == false) {
+			system("color 1f");
+			cout << "----------------------------------------------------------------------------------------------------------------------" << endl;
+			cout << "----------------------------------------------------------------------------------------------------------------------" << endl;
+			cout << "-----------------------------------------------------K-129------------------------------------------------------------" << endl;
+			cout << "----------------------------------------------------------------------------------------------------------------------" << endl;
+			cout << "----------------------------------------------------------------------------------------------------------------------" << endl;
+			system("pause");
+			system("color 0f");
+			title = true;
+		}
+		cout << "Oxygen left: " << timeLeft << endl;
+		cout << "your inventory: ";
+		for (int i = 0; i < 5; i++)
+			cout << inventory[i] << " | ";
+		cout << endl << endl;
+		switch (room) {
+		case 1:
+			if (rm1description == false) {
+				cout << "You wake up on a metal bunk bed in a cold room with no memory of anything." << endl;
+				cout << "There are 9 other identical bunks all lined up against the wall with neat, white sheets on them." << endl;
+				cout << "The floor, ceiling, and walls are made of white plastic and there are no windows." << endl;
+				rm1description = true;
+			}
+			cout << "There's a small table with a COMPUTER on it in the center of the room." << endl;
+			cout << "The sheets on one BED are slightly askew and it looks like something is underneath." << endl;
+			cout << "There is a heavy, metal DOOR on the west side of the room" << endl;
+			cin >> input;
+			if (input == "bed") {
+				cout << "You look in the bed and find a small thumb drive that looks like it might fit in the COMPUTER" << endl;
+				inventory[0] = "thumb drive";
+			}
+			if (input == "computer") {
+				Computer();
+			}
+			if (input == "door") {
+				cout << "enter 4-digit door code:" << endl;
+				cin >> room1code;
+				if (room1code == 9375) {
+					cout << "you unlocked the door!" << endl;
+					room = 2;
+				}
+				else
+					cout << "That's not the code" << endl;
+			}
+			break;
+		case 2:
+			cout << "you're in room 2, you can go WEST, EAST, or UP" << endl;
+			cout << "there's a bunch of cardboard BOXES" << endl;
+			cin >> input;
+			if (input == "west")
+				room = 3;
+			else if (input == "east")
+				room = 1;
+			else if (input == "up")
+				room = 12;
+			else if (input == "boxes") {
+				cout << "you found some duct tape!!!" << endl;
+				inventory[1] = "tape";
+			}
+			break;
+		case 3:
+			cout << "you're in room 3, you can go WEST or EAST" << endl;
+			cin >> input;
+			if (input == "east")
+				room = 2;
+			else if (input == "west")
+				room = 4;
+			break;
+		case 4:
+			cout << "you're in room 4, you can go WEST, EAST, or UP" << endl;
+			cout << "There is a REFRIGERATOR in the corner" << endl;
+			cin >> input;
+			if (input == "up")
+				room = 9;
+			else if (input == "west")
+				room = 5;
+			else if (input == "east")
+				room = 3;
+			else if (input == "refrigerator") {
+				cout << "you found some drippy cheese!" << endl;
+				inventory[4] = "drippy cheese";
+			}
+			break;
+		case 5:
+			cout << "you're in room 5, you can go WEST or EAST" << endl;
+			cin >> input;
+			if (input == "west")
+				room = 6;
+			else if (input == "east")
+				room = 4;
+			break;
+		case 6:
+			cout << "you're in room 6, you can go UP or EAST" << endl;
+			cin >> input;
+			if (input == "up") {
+				if (leak == false) {
+					LeakSim();
+					leak = true;
+				}
+				room = 7;
+			}
+			else if (input == "east")
+				room = 5;
+			break;
+		case 7:
+			cout << "you're in room 7, you can go EAST or DOWN" << endl;
+			cout << "there's a KEY sitting on a table in the corner." << endl;
+			cin >> input;
+			if (input == "east")
+				room = 8;
+			else if (input == "down")
+				room = 6;
+			else if (input == "key")
+				inventory[2] = "key";
+			break;
+		case 8:
+			cout << "you're in room 8, you can go WEST or EAST" << endl;
+			cin >> input;
+			if (input == "west") {
+				if (leak == false) {
+					LeakSim();
+					leak = true;
+				}
+				room = 7;
+			}
+			else if (input == "east")
+				room = 9;
+			break;
+		case 9:
+			cout << "you're in room 9, you can go UP, DOWN, EAST, or WEST" << endl;
+			cin >> input;
+			if (input == "up")
+				room = 10;
+			else if (input == "down")
+				room = 4;
+			else if (input == "east")
+				room = 11;
+			else if (input == "west")
+				room = 8;
+			break;
+		case 10:
+			cout << "you're in room 10, you can go DOWN" << endl;
+			cout << "there's a CD player" << endl;
+			cin >> input;
+			if (input == "down")
+				room = 9;
+			else if (input == "cd") {
+				if (inventory[3] == "CD") {
+					cout << "you insert your cd" << endl;
+					system("pause");
+					Beep(200, 200);
+					Beep(300, 200);
+					Beep(400, 200);
+				}
+				else if (inventory[3] != "CD") {
+					cout << "you don't have a cd" << endl;
+				}
+			}
+			break;
+		case 11:
+			cout << "you're in room 11, you can go EAST or WEST" << endl;
+			cout << "there's a CD sitting on the floor in the middle of the room." << endl;
+			cin >> input;
+			if (input == "east")
+				room = 12;
+			else if (input == "west")
+				room = 9;
+			else if (input == "cd")
+				inventory[3] = "CD";
+			break;
+		case 12:
+			cout << "you're in room 12, you can go WEST or DOWN" << endl;
+			cout << "there is a slot to put a KEY" << endl;
+			cin >> input;
+			if (input == "west")
+				room = 11;
+			else if (input == "down")
+				room = 2;
+			else if (input == "key") {
+				if (inventory[2] == "key") {
+					cout << "The closest land is San Diego. Would you like to go there? YES/NO" << endl;
+					cin >> input;
+					if (input == "yes") {
+						system("pause");
+						room = 13;
+					}
+					else if (input == "no")
+						cout << "Okay. Your loss." << endl;
+				}
+				else if (inventory[2] != "key")
+					cout << "you don't have a key" << endl;
+			}
+			break;
+		case 13:
+			cout << "you've arrived in San Diego!" << endl;
+			cout << "----------------------------YOU WIN!!!-----------------------------" << endl;
+			return 0;
+			break;
+		}
+	}
+}//end main
+void Computer() {
+	system("color 20");
+	char keypress;
+	do {
+		cout << "press q to quit" << endl;
+		cout << "press m to view map" << endl;
+		cout << "press d to access drive" << endl;
+		cin >> keypress;
+		if (keypress == 'm') {
+			cout << "  " << endl << endl << endl << endl;
+			cout << "                                              __________" << endl;
+			cout << "                                             |          |" << endl;
+			cout << "                                             |    10    |" << endl;
+			cout << "                                             |          |" << endl;
+			cout << "                       ______________________|__________|_____________________" << endl;
+			cout << "                      |          |           |          |          |          |" << endl;
+			cout << "                      |    7     |     8     |    9     |    11    |    12    |" << endl;
+			cout << "                      |          |           |          |          |          |" << endl;
+			cout << "                      |__________|___________|__________|__________|__________|__________" << endl;
+			cout << "                      |          |           |          |          |          |          |" << endl;
+			cout << "                      |    6     |     5     |    4     |    3     |     2    |     1    |" << endl;
+			cout << "                      |          |           |          |          |          |          |" << endl;
+			cout << "                      |__________|___________|__________|__________|__________|__________|" << endl << endl << endl;
+		}
+		if (keypress == 'd') {
+			if (inventory[0] == "thumb drive") {
+				cout << "Welcome to the K-129!" << endl << "You are on a Soviet Submarine all by yourself." << endl;
+				cout << "If you want to survive you need to find a way to get to land" << endl;
+				cout << "But you only have a little oxygen left so better figure this out fast!" << endl;
+				cout << "Door code is: 9375" << endl;
+			}
+			else cout << "access denied." << endl;
+		}
+	} while (keypress != 'q');
+	system("color 0f");
+}
+void LeakSim() {
+	int LeakSize = 100;
+	int damage;
+	char dummy;
+	cout << endl << endl << "------------------LEAK!!!!!!----------------------" << endl << endl;
+	cout << "there's water leaking into the sub! Fix it quick or your sub will implode!" << endl;
+	while (timeLeft > 0 && LeakSize > 0) {
+		//leak fix attempt
+		if (inventory[1] == "tape") {
+			damage = rand() % 11 + 20;
+			cout << "you put a piece of tape on the leak and fix " << damage << "% of the leak" << endl;
+			LeakSize -= damage;
+			cout << "press any key to continue..." << endl;
+			cin >> dummy;
+			//leak attack
+			damage = rand() % 21 + 40;
+			cout << "the leak let out " << damage << " of your pressure." << endl;
+			timeLeft -= damage;
+			cout << "press any key to continue..." << endl;
+			cin >> dummy;
+		}
+		else if (inventory[1] != "tape") {
+			damage = 1; //leak fix attempt
+			cout << "you try to stop the leak with your hands but it doesn't do much" << endl;
+			LeakSize -= damage;
+			cout << "press any key to continue..." << endl;
+			cin >> dummy;
+			//leak attack
+			damage = rand() % 21 + 100;
+			cout << "the leak let out " << damage << " of your pressure." << endl;
+			timeLeft -= damage;
+			cout << "press any key to continue..." << endl;
+			cin >> dummy;
+		}
+		if (timeLeft > 0)
+			cout << "air pressure left = " << timeLeft << endl;
+		else
+			cout << "You implode and died!" << endl;
+
+		if (LeakSize > 0)
+			cout << "Leak = " << LeakSize << "%" << endl;
+		else
+			cout << "You fixed the leak!!!" << endl;
+		cout << "press any key to continue..." << endl;
+		cin >> dummy;
+	}
+	cout << "------------------------------------------------------------------------" << endl << endl;
+}
